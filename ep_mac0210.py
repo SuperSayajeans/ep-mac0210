@@ -704,7 +704,7 @@ def ep(n, y, t):
     for i in range(0, n):
         w[i] = y[i]*(w[i]-0.5)/10 + y[i]
     
-    s = spline(w, 0, 9)
+    s = spline(w, 0, t[n-1])
     
     B = np.array(s.beta_j(0,t))
     for i in range(1,n):
@@ -713,9 +713,11 @@ def ep(n, y, t):
     M1 = np.matmul(np.transpose(B), B)
     M2 = matrix_m2(n)
     b = np.matmul(np.transpose(B), y.transpose())
+    b2d = np.array([b])
     M = M1 + M2
     a = np.linalg.solve(M1+np.dot(lambd, M2), b)
-    final = np.matmul(np.matmul(np.transpose(a), M), a) - np.dot(2, np.matmul(b.transpose(),a))
+    a2d = np.array([a])
+    final = np.matmul(np.matmul(a2d, M), np.transpose(a2d)) - np.dot(2, np.matmul(np.transpose(b2d),a2d))
     
 
   #  print(w)
@@ -724,10 +726,11 @@ def ep(n, y, t):
   #  print(M2)
   #  print(b)
   #  print(M)
-  #  print(a)
+    print(a)
+    print(final)
   
-    plt.plot(t, final)
-    plt.show()
+  #  plt.plot(t, final)
+  #  plt.show()
   
     return
     
