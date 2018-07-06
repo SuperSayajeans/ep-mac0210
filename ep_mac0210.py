@@ -698,33 +698,50 @@ def matrix_m2(n):
   
 def ep(n, y, t):
     
+    w = np.zeros(n)
+    s = spline(w, 0, 30)
+    
+    B = np.array(s.beta_j(0,t))
+    for i in range(1,n):
+      B = np.column_stack((B, s.beta_j(i,t)))
+
+    M1 = np.matmul(np.transpose(B), B)
+    M2 = matrix_m2(n)
+    b = np.matmul(np.transpose(B), y.transpose())
+    M = M1 + M2
+    
+  #  print(w)
+  #  print(B)
+  #  print(M1)
+  #  print(M2)
+  #  print(b)
+  #  print(M)
+    
     return
     
 def main():
 
-##### default n will be 30, x_min 0, x_max 30 #####
+##### default n will be 30, x_min 0, x_max 29 #####
 ##### y[i] will be x[i]^2 if not given #####
 
     n = 30
     x_min = 0
-    x_max = 30
-    y = []
-    x = []
+    x_max = 29
+    y = np.zeros(n)
+    x = np.zeros(n)
     
-    x.append(x_min)
+    x[0]= x_min
     step = (x_max - x_min) / (n - 1) 
-    for i in range(1,n-2):
-        x.append(x[i-1] + step)
-    x.append(x_max)
+    for i in range(1,n-1):
+        x[i] = x[i-1] + step
     
-    for i in range(0, n-1):
-        y.append(x[i]**2)
+    x[n-1] = x_max
+    
+    for i in range(0, n):
+        y[i] = x[i]**2
     
     print(x)
     print(y)
-    
-    plt.plot(x, y)
-    plt.show()
     
     ep(n, y, x)
     return
