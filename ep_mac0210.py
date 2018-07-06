@@ -698,12 +698,13 @@ def matrix_m2(n):
   
 def ep(n, y, t):
     
+    lambd = 100
     w = np.random.rand(n)  
     
     for i in range(0, n):
-        w[i] = w[i] + y[i] 
+        w[i] = y[i]*(w[i]-0.5)/10 + y[i]
     
-    s = spline(w, 0, 499)
+    s = spline(w, 0, 9)
     
     B = np.array(s.beta_j(0,t))
     for i in range(1,n):
@@ -713,14 +714,21 @@ def ep(n, y, t):
     M2 = matrix_m2(n)
     b = np.matmul(np.transpose(B), y.transpose())
     M = M1 + M2
+    a = np.linalg.solve(M1+lambd*M2, b)
+    final = np.matmul(np.matmul(np.transpose(a), M), a) - 2*np.matmul(b.transpose(),a)
     
+
   #  print(w)
   #  print(B)
   #  print(M1)
   #  print(M2)
   #  print(b)
   #  print(M)
-    
+  #  print(a)
+  
+    plt.plot(t, final)
+    plt.show()
+  
     return
     
 def main():
@@ -728,9 +736,9 @@ def main():
 ##### default n will be 30, x_min 0, x_max 29 #####
 ##### y[i] will be x[i]^2 if not given #####
 
-    n = 500
+    n = 10
     x_min = 0
-    x_max = 499
+    x_max = 9
     y = np.zeros(n)
     x = np.zeros(n)
     
@@ -744,8 +752,8 @@ def main():
     for i in range(0, n):
         y[i] = x[i]**2
     
- #   print(x)
- #   print(y)
+    print(x)
+    print(y)
     
  #   plt.plot(x, y)
  #   plt.show()
