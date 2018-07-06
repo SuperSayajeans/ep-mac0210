@@ -714,8 +714,8 @@ def ep(n, y, t):
     M2 = matrix_m2(n)
     b = np.matmul(np.transpose(B), y.transpose())
     M = M1 + M2
-    a = np.linalg.solve(M1+lambd*M2, b)
-    final = np.matmul(np.matmul(np.transpose(a), M), a) - 2*np.matmul(b.transpose(),a)
+    a = np.linalg.solve(M1+np.dot(lambd, M2), b)
+    final = np.matmul(np.matmul(np.transpose(a), M), a) - np.dot(2, np.matmul(b.transpose(),a))
     
 
   #  print(w)
@@ -751,13 +751,14 @@ def main():
     
     for i in range(0, n):
         y[i] = x[i]**2
-    
-    print(x)
-    print(y)
+        
+
+ #   print(x)
+ #   print(y)
     
  #   plt.plot(x, y)
  #   plt.show()
-    
+ 
     ep(n, y, x)
     return
 
